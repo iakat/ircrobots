@@ -16,17 +16,21 @@ asyncio-throttle==1.0.2
     # via -r requirements.in
 idna==3.6
     # via anyio
-ircstates==0.12.1
+ircstates @ git+https://github.com/iakat/ircstates.git
     # via -r requirements.in
 irctokens==2.0.2
     # via ircstates
-pendulum==2.1.2
+pendulum==3.0.0
     # via ircstates
 python-dateutil==2.9.0.post0
-    # via pendulum
-pytzdata==2020.1
-    # via pendulum
+    # via
+    #   pendulum
+    #   time-machine
 six==1.16.0
     # via python-dateutil
 sniffio==1.3.1
     # via anyio
+time-machine==2.14.0
+    # via pendulum
+tzdata==2024.1
+    # via pendulum
