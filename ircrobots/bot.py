@@ -1,12 +1,14 @@
-import asyncio, traceback
-import anyio
+import asyncio
+import traceback
 from typing import Dict
 
+import anyio
 from ircstates.server import ServerDisconnectedException
 
-from .server    import ConnectionParams, Server
-from .transport import TCPTransport
 from .interface import IBot, IServer, ITCPTransport
+from .server import ConnectionParams, Server
+from .transport import TCPTransport
+
 
 class Bot(IBot):
     def __init__(self):
@@ -51,8 +53,8 @@ class Bot(IBot):
     async def _run_server(self, server: Server):
         try:
             async with anyio.create_task_group() as tg:
-                await tg.spawn(server._read_lines)
-                await tg.spawn(server._send_lines)
+                tg.start_soon(server._read_lines)
+                tg.start_soon(server._send_lines)
         except ServerDisconnectedException:
             server.disconnected = True
 
@@ -62,4 +64,4 @@ class Bot(IBot):
         async with anyio.create_task_group() as tg:
             while not tg.cancel_scope.cancel_called:
                 server = await self._server_queue.get()
-                await tg.spawn(self._run_server, server)
+                tg.start_soon(self._run_server, server)
